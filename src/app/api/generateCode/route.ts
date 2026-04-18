@@ -3,8 +3,15 @@ import { getSystemPrompt } from '@/lib/systemPrompt';
 // Standard Edge runtime for streaming
 export const runtime = 'edge';
 
+// Primary model is the 120B model requested by user
 const PRIMARY_MODEL = 'openai/gpt-oss-120b:free';
-const FALLBACK_MODEL = 'meta-llama/llama-3.1-8b-instruct:free';
+
+// Fallback chain for maximum reliability
+const FALLBACK_MODELS = [
+  'meta-llama/llama-3.1-8b-instruct:free',
+  'qwen/qwen-2.5-72b-instruct:free',
+  'mistralai/mistral-7b-instruct:free',
+];
 
 export async function POST(req: Request) {
   const apiKey = process.env.OPENROUTER_API_KEY?.trim();
@@ -31,13 +38,13 @@ export async function POST(req: Request) {
     const systemPrompt = getSystemPrompt(wireframe, designConcept);
 
     const openRouterRequest = async (model: string) => {
-      console.log(`OpenRouter: Sending request for ${model}`);
+      console.log(`OpenRouter: Attempting generation with ${model}`);
       return fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'HTTP-Referer': 'https://claritiy.pro',
-          'X-Title': 'CLARITIY',
+          'X-Title': 'CLARITIY Builder',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -54,9 +61,13 @@ export async function POST(req: Request) {
 
     let response = await openRouterRequest(PRIMARY_MODEL);
 
+    // Iterative fallback if the primary model fails
     if (!response.ok) {
-      console.warn(`Primary model ${PRIMARY_MODEL} failed (Status: ${response.status}), trying fallback...`);
-      response = await openRouterRequest(FALLBACK_MODEL);
+      for (const model of FALLBACK_MODELS) {
+        console.warn(`${model} fallback attempt due to error ${response.status}`);
+        response = await openRouterRequest(model);
+        if (response.ok) break;
+      }
     }
 
     if (!response.ok) {
@@ -69,7 +80,7 @@ export async function POST(req: Request) {
       }
 
       return new Response(JSON.stringify({ 
-        error: `OpenRouter Error (${response.status}): ${errorMessage}` 
+        error: `All models failed. Last Error (${response.status}): ${errorMessage}` 
       }), {
         status: response.status,
         headers: { 'Content-Type': 'application/json' },
@@ -87,7 +98,7 @@ export async function POST(req: Request) {
 
   } catch (error: unknown) {
     console.error("API critical error:", error);
-    return new Response(JSON.stringify({ error: (error as Error).message || 'Something went wrong' }), {
+    return new Response(JSON.stringify({ error: (error as Error).message || 'Internal Server Error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
