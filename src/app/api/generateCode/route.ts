@@ -1,12 +1,13 @@
-import Together from 'together-ai';
+import OpenAI from 'openai';
 import { getSystemPrompt } from '@/lib/systemPrompt';
 
 // Standard Edge runtime for streaming
 export const runtime = 'edge';
 
-// We fall back to a mock key to avoid crashes before they provide it
-const together = new Together({
-  apiKey: process.env.TOGETHER_API_KEY || 'mock_key',
+// Initialize OpenAI client pointed to OpenRouter 
+const client = new OpenAI({
+  baseURL: 'https://openrouter.ai/api/v1',
+  apiKey: process.env.OPENROUTER_API_KEY || 'mock_key',
 });
 
 export async function POST(req: Request) {
@@ -23,8 +24,8 @@ export async function POST(req: Request) {
 
     const systemPrompt = getSystemPrompt(wireframe, designConcept);
 
-    const res = await together.chat.completions.create({
-      model: 'google/gemma-4-26b-a4b-it',
+    const res = await client.chat.completions.create({
+      model: 'google/gemma-4-26b-a4b-it:free',
       messages: [
         {
           role: 'system',
