@@ -24,8 +24,9 @@ export async function POST(req: Request) {
 
     const systemPrompt = getSystemPrompt(wireframe, designConcept);
 
-    const res = await client.chat.completions.create({
-      model: 'google/gemma-4-26b-a4b-it:free',
+    const stream = await client.chat.completions.create({
+      // Corrected to a valid OpenRouter free model slug
+      model: 'google/gemma-2-9b-it:free',
       messages: [
         {
           role: 'system',
@@ -39,12 +40,28 @@ export async function POST(req: Request) {
       stream: true,
     });
 
-    const stream = res.toReadableStream();
+    const encoder = new TextEncoder();
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of stream) {
+            const text = `data: ${JSON.stringify(chunk)}\n\n`;
+            controller.enqueue(encoder.encode(text));
+          }
+          controller.enqueue(encoder.encode('data: [DONE]\n\n'));
+        } catch (e) {
+          controller.error(e);
+        } finally {
+          controller.close();
+        }
+      },
+    });
     
-    return new Response(stream, {
+    return new Response(readableStream, {
       headers: new Headers({
         'Cache-Control': 'no-cache',
-        'Content-Type': 'text/event-stream'
+        'Content-Type': 'text/event-stream',
+        'Connection': 'keep-alive',
       }),
     });
   } catch (error: unknown) {

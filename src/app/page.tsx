@@ -10,29 +10,39 @@ import { GitHubExport } from "@/components/GitHubExport";
 async function* readStream(response: Response) {
   const reader = response.body?.getReader();
   const decoder = new TextDecoder();
+  let buffer = "";
 
   if (!reader) return;
 
   while (true) {
     const { done, value } = await reader.read();
-    if (done) break;
+    if (done) {
+      if (buffer) {
+        yield* processText(buffer);
+      }
+      break;
+    }
 
-    const text = decoder.decode(value, { stream: true });
-    // In SSE streams, messages are formatted like "data: {...}\n\n"
-    // Together API's Kimi implementation via OpenAI standard sometimes returns 'data: {"choices": [{"delta": {"content": "..."}}]}'
-    const parts = text.split("\\n");
-    for (const part of parts) {
-      const trimmed = part.trim();
-      if (!trimmed || trimmed === "data: [DONE]") continue;
-      
-      if (trimmed.startsWith("data: ")) {
-        try {
-          const jsonStr = trimmed.substring(6);
-          if (jsonStr === "[DONE]") continue;
-          yield JSON.parse(jsonStr);
-        } catch (error) {
-          console.warn("Failed to parse JSON chunk", trimmed, error);
-        }
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() || "";
+
+    for (const line of lines) {
+      yield* processText(line);
+    }
+  }
+
+  function* processText(text: string) {
+    const trimmed = text.trim();
+    if (!trimmed || trimmed === "data: [DONE]") return;
+    
+    if (trimmed.startsWith("data: ")) {
+      try {
+        const jsonStr = trimmed.substring(6);
+        if (jsonStr === "[DONE]") return;
+        yield JSON.parse(jsonStr);
+      } catch (error) {
+        console.warn("Failed to parse JSON chunk", trimmed, error);
       }
     }
   }
