@@ -139,6 +139,7 @@ export default function Home() {
         throw new Error(errorData.error || "Failed to generate code");
       }
 
+      let currentBuffer = "";
       for await (const chunk of readStream(res)) {
         const content = chunk.choices?.[0]?.delta?.content || "";
         if (content) {
