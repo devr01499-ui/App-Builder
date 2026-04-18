@@ -28,7 +28,7 @@ export function WireframeEditor({ wireframe, setWireframe }: WireframeEditorProp
         <div className="p-4 border-t border-slate-700/50 bg-slate-900">
           <p className="text-xs text-slate-400 mb-2">
             Describe the layout structure or constraints to guide the AI. Keep it brief to save tokens.
-            (e.g., "Header at top, sidebar on left, 3x3 grid in center")
+            (e.g., &quot;Header at top, sidebar on left, 3x3 grid in center&quot;)
           </p>
           <textarea
             value={wireframe}

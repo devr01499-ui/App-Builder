@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       stream: true,
     });
 
-    // @ts-ignore - The types from the SDK might not directly map to a stream in edge sometimes, but mostly it does.
+    // @ts-expect-error - The types from the SDK might not directly map to a stream in edge sometimes, but mostly it does.
     const stream = res.toReadableStream();
     
     return new Response(stream, {
@@ -47,9 +47,9 @@ export async function POST(req: Request) {
         'Content-Type': 'text/event-stream'
       }),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("API error:", error);
-    return new Response(JSON.stringify({ error: error.message || 'Something went wrong' }), {
+    return new Response(JSON.stringify({ error: (error as Error).message || 'Something went wrong' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

@@ -72,9 +72,9 @@ export function GitHubExport({ code }: GitHubExportProps) {
       
       setStatus("success");
       setMessage(`Successfully exported to ${type.toUpperCase()}!`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setStatus("error");
-      setMessage(error.message || "Failed to export");
+      setMessage((error as Error).message || "Failed to export");
     } finally {
       setLoading(false);
     }

@@ -29,8 +29,8 @@ async function* readStream(response: Response) {
           const jsonStr = trimmed.substring(6);
           if (jsonStr === "[DONE]") continue;
           yield JSON.parse(jsonStr);
-        } catch (e) {
-          console.warn("Failed to parse JSON chunk", trimmed);
+        } catch (error) {
+          console.warn("Failed to parse JSON chunk", trimmed, error);
         }
       }
     }
