@@ -134,9 +134,11 @@ export default function Home() {
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to generate code");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to generate code");
+      }
 
-      let currentBuffer = "";
       for await (const chunk of readStream(res)) {
         const content = chunk.choices?.[0]?.delta?.content || "";
         if (content) {
@@ -151,7 +153,7 @@ export default function Home() {
 
     } catch (error) {
       console.error(error);
-      alert("Something went wrong. Please check your API key.");
+      alert((error as Error).message || "Something went wrong. Please check your API key.");
       setLoadingStep("idle");
     } finally {
       setIsLoading(false);
