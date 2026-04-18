@@ -4,26 +4,47 @@
   --color-zinc-950: #09090b;
   --color-zinc-900: #18181b;
   --color-zinc-100: #f4f4f5;
+  --color-zinc-200: #e4e4e7;
 }
 
 body {
   background-color: #ffffff;
-  background-image: radial-gradient(circle at 50% -20%, #f4f4f5, transparent 80%);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(244, 244, 245, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(228, 228, 231, 0.3) 0px, transparent 50%);
   color: #09090b;
+  overflow-x: hidden;
+}
+
+.glass-panel {
+  @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl;
+}
+
+.subtle-grid {
+  background-image: radial-gradient(#e4e4e7 0.5px, transparent 0.5px);
+  background-size: 24px 24px;
 }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: #e4e4e7;
-  border-radius: 4px;
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #d4d4d8;
+}
+
+.step-active {
+  @apply text-zinc-900 font-semibold scale-105;
+}
+
+.step-inactive {
+  @apply text-zinc-400 font-normal;
 }

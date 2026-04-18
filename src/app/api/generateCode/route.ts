@@ -10,6 +10,10 @@ const client = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY || 'mock_key',
 });
 
+// Primary and Fallback model slugs
+const PRIMARY_MODEL = 'google/gemma-2-9b-it:free';
+const FALLBACK_MODEL = 'meta-llama/llama-3.1-8b-instruct:free';
+
 export async function POST(req: Request) {
   try {
     const json = await req.json();
@@ -24,21 +28,37 @@ export async function POST(req: Request) {
 
     const systemPrompt = getSystemPrompt(wireframe, designConcept);
 
-    const stream = await client.chat.completions.create({
-      // Corrected to a valid OpenRouter free model slug
-      model: 'google/gemma-2-9b-it:free',
-      messages: [
-        {
-          role: 'system',
-          content: systemPrompt,
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      stream: true,
-    });
+    let stream;
+    try {
+      console.log(`Attempting generation with ${PRIMARY_MODEL}...`);
+      stream = await client.chat.completions.create({
+        model: PRIMARY_MODEL,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: prompt },
+        ],
+        stream: true,
+        // Recommended headers for OpenRouter
+        extraHeaders: {
+          'HTTP-Referer': 'https://claritiy.ai',
+          'X-Title': 'CLARITIY App Builder',
+        }
+      });
+    } catch (primaryError) {
+      console.error(`Primary model (${PRIMARY_MODEL}) failed. Falling back to ${FALLBACK_MODEL}...`, primaryError);
+      stream = await client.chat.completions.create({
+        model: FALLBACK_MODEL,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: prompt },
+        ],
+        stream: true,
+        extraHeaders: {
+          'HTTP-Referer': 'https://claritiy.ai',
+          'X-Title': 'CLARITIY App Builder',
+        }
+      });
+    }
 
     const encoder = new TextEncoder();
     const readableStream = new ReadableStream({
