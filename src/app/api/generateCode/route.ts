@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     const systemPrompt = getSystemPrompt(wireframe, designConcept);
 
     const res = await together.chat.completions.create({
-      model: 'moonshotai/Kimi-K2.5',
+      model: 'google/gemma-4-26b-a4b-it',
       messages: [
         {
           role: 'system',
