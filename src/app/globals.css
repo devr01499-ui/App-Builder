@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-slate-950: #020617;
-  --color-slate-900: #0f172a;
-  --color-slate-800: #1e293b;
+  --color-zinc-950: #09090b;
+  --color-zinc-900: #18181b;
+  --color-zinc-100: #f4f4f5;
 }
 
 body {
-  background-color: var(--color-slate-950);
-  background-image: radial-gradient(circle at 50% -20%, #1e293b, transparent 80%);
-  color: #f8fafc;
+  background-color: #ffffff;
+  background-image: radial-gradient(circle at 50% -20%, #f4f4f5, transparent 80%);
+  color: #09090b;
 }
 
 /* Scrollbar styling */
@@ -21,9 +21,9 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #e4e4e7;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #d4d4d8;
 }

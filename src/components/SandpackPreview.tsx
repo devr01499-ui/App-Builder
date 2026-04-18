@@ -21,10 +21,10 @@ const tailwindHtmlContent = `<!DOCTYPE html>
 
 export function SandpackPreview({ code }: SandpackPreviewProps) {
   return (
-    <div className="w-full h-full rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl">
+    <div className="w-full h-full rounded-2xl overflow-hidden border border-zinc-200 shadow-sm">
       <Sandpack
         template="react-ts"
-        theme="dark"
+        theme="light"
         customSetup={{
           dependencies: {
             "lucide-react": "latest",

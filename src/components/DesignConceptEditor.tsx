@@ -1,25 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { LayoutTemplate, ChevronDown, ChevronUp } from "lucide-react";
+import { Palette, ChevronDown, ChevronUp } from "lucide-react";
 
-interface WireframeEditorProps {
-  wireframe: string;
-  setWireframe: (val: string) => void;
+interface DesignConceptEditorProps {
+  designConcept: string;
+  setDesignConcept: (val: string) => void;
 }
 
-export function WireframeEditor({ wireframe, setWireframe }: WireframeEditorProps) {
+export function DesignConceptEditor({ designConcept, setDesignConcept }: DesignConceptEditorProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="w-full bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm transition-all hover:shadow-md">
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-4 bg-zinc-50 hover:bg-zinc-100 text-zinc-900 transition-colors"
       >
         <div className="flex items-center space-x-2">
-          <LayoutTemplate size={18} className="text-zinc-600" />
-          <span className="font-medium text-sm">Add Wireframe / Constraints (Optional)</span>
+          <Palette size={18} className="text-zinc-600" />
+          <span className="font-medium text-sm">Design Concept (Optional)</span>
         </div>
         {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
       </button>
@@ -27,13 +28,12 @@ export function WireframeEditor({ wireframe, setWireframe }: WireframeEditorProp
       {isOpen && (
         <div className="p-4 border-t border-zinc-200 bg-white">
           <p className="text-xs text-zinc-500 mb-2">
-            Describe the layout structure or constraints to guide the AI. Keep it brief to save tokens.
-            (e.g., &quot;Header at top, sidebar on left, 3x3 grid in center&quot;)
+            Describe the visual identity or design aesthetics you want (e.g., &quot;Minimalist monochrome, brutalist, rounded colorful neon&quot;)
           </p>
           <textarea
-            value={wireframe}
-            onChange={(e) => setWireframe(e.target.value)}
-            placeholder="Layout instructions..."
+            value={designConcept}
+            onChange={(e) => setDesignConcept(e.target.value)}
+            placeholder="Visual instructions..."
             className="w-full bg-zinc-50 border border-zinc-300 rounded-lg p-3 text-sm text-zinc-800 focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 min-h-[100px] resize-y"
           />
         </div>

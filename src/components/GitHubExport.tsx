@@ -81,10 +81,10 @@ export function GitHubExport({ code }: GitHubExportProps) {
   };
 
   return (
-    <div className="w-full bg-slate-900 border border-slate-700/50 rounded-xl p-4 shadow-lg">
+    <div className="w-full bg-white border border-zinc-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all">
       <div className="flex items-center space-x-2 mb-4">
-        <GitGraph className="text-white" size={20} />
-        <h3 className="font-semibold text-white">Export to GitHub</h3>
+        <GitGraph className="text-zinc-600" size={20} />
+        <h3 className="font-semibold text-zinc-800">Export to GitHub</h3>
       </div>
       
       <div className="space-y-3">
@@ -93,21 +93,21 @@ export function GitHubExport({ code }: GitHubExportProps) {
           placeholder="GitHub Personal Access Token"
           value={token}
           onChange={(e) => setToken(e.target.value)}
-          className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+          className="w-full bg-zinc-50 border border-zinc-300 rounded-lg p-2.5 text-sm text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-500"
         />
         
         <div className="flex space-x-3">
           <button
             onClick={() => handleExport("gist")}
             disabled={loading || !token || !code}
-            className="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 flex justify-center items-center"
+            className="flex-1 bg-zinc-100 hover:bg-zinc-200 border border-zinc-300 text-zinc-800 py-2 px-4 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 flex justify-center items-center"
           >
             {loading ? <Loader2 size={16} className="animate-spin" /> : "Create Gist"}
           </button>
           <button
             onClick={() => handleExport("repo")}
             disabled={loading || !token || !code}
-            className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 flex justify-center items-center"
+            className="flex-1 bg-zinc-900 hover:bg-zinc-800 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 flex justify-center items-center"
           >
             {loading ? <Loader2 size={16} className="animate-spin" /> : "Create Repo"}
           </button>

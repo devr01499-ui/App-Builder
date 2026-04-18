@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ArrowRight, Code2, Sparkles } from "lucide-react";
 import { SandpackPreview } from "@/components/SandpackPreview";
 import { WireframeEditor } from "@/components/WireframeEditor";
+import { DesignConceptEditor } from "@/components/DesignConceptEditor";
 import { GitHubExport } from "@/components/GitHubExport";
 
 async function* readStream(response: Response) {
@@ -40,6 +41,7 @@ async function* readStream(response: Response) {
 export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [wireframe, setWireframe] = useState("");
+  const [designConcept, setDesignConcept] = useState("");
   const [generatedCode, setGeneratedCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -54,7 +56,7 @@ export default function Home() {
       const res = await fetch("/api/generateCode", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, wireframe }),
+        body: JSON.stringify({ prompt, wireframe, designConcept }),
       });
 
       if (!res.ok) {
@@ -86,14 +88,14 @@ export default function Home() {
       <div className="w-full xl:w-[400px] flex-shrink-0 flex flex-col gap-6">
         <div className="space-y-4">
           <div className="flex items-center space-x-3 mb-2">
-            <div className="w-10 h-10 bg-indigo-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30">
-              <Sparkles className="text-indigo-400" size={20} />
+            <div className="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center border border-zinc-200">
+              <Sparkles className="text-zinc-900" size={20} />
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent">
-              AI App Builder
+            <h1 className="text-2xl font-bold bg-gradient-to-br from-zinc-900 to-zinc-500 bg-clip-text text-transparent">
+              Clariity
             </h1>
           </div>
-          <p className="text-slate-400 text-sm">
+          <p className="text-zinc-500 text-sm">
             Powered by Together AI & Kimi K2.5. Describe the web app you want to build and watch it render in real-time.
           </p>
         </div>
@@ -105,12 +107,12 @@ export default function Home() {
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="e.g. Build me a sleek calculator app..."
               required
-              className="w-full bg-slate-900 border border-slate-700/50 rounded-xl p-4 pr-12 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all shadow-lg min-h-[140px] resize-y"
+              className="w-full bg-white border border-zinc-200 rounded-xl p-4 pr-12 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400 transition-all shadow-sm min-h-[140px] resize-y"
             />
             <button
               type="submit"
               disabled={isLoading || !prompt}
-              className="absolute right-3 bottom-3 p-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg disabled:opacity-50 disabled:hover:bg-indigo-600 transition-colors shadow-md"
+              className="absolute right-3 bottom-3 p-2 bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg disabled:opacity-50 disabled:hover:bg-zinc-900 transition-colors shadow-sm"
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -121,6 +123,7 @@ export default function Home() {
           </div>
 
           <WireframeEditor wireframe={wireframe} setWireframe={setWireframe} />
+          <DesignConceptEditor designConcept={designConcept} setDesignConcept={setDesignConcept} />
         </form>
 
         <div className="mt-auto hidden xl:block">
@@ -129,11 +132,11 @@ export default function Home() {
       </div>
 
       {/* Right Canvas Layout */}
-      <div className="flex-1 min-h-[60vh] xl:min-h-0 bg-slate-900/50 border border-slate-800 rounded-3xl p-2 md:p-6 shadow-2xl relative flex flex-col">
+      <div className="flex-1 min-h-[60vh] xl:min-h-0 bg-zinc-50 border border-zinc-200 rounded-3xl p-2 md:p-6 shadow-md relative flex flex-col">
           {!generatedCode && !isLoading ? (
-            <div className="flex-1 flex flex-col items-center justify-center text-slate-500 p-8 text-center border-2 border-dashed border-slate-800 rounded-2xl">
-              <Code2 size={48} className="mb-4 text-slate-600 opacity-50" />
-              <h2 className="text-lg font-medium text-slate-400 mb-2">Awaiting Instructions</h2>
+            <div className="flex-1 flex flex-col items-center justify-center text-zinc-500 p-8 text-center border-2 border-dashed border-zinc-300 rounded-2xl">
+              <Code2 size={48} className="mb-4 text-zinc-400 opacity-50" />
+              <h2 className="text-lg font-medium text-zinc-600 mb-2">Awaiting Instructions</h2>
               <p className="text-sm max-w-sm">
                 Enter a prompt on the left to start generating your React components.
               </p>

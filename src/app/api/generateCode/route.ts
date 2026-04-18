@@ -12,7 +12,7 @@ const together = new Together({
 export async function POST(req: Request) {
   try {
     const json = await req.json();
-    const { prompt, wireframe } = json;
+    const { prompt, wireframe, designConcept } = json;
 
     if (!prompt) {
       return new Response(JSON.stringify({ error: 'Prompt is required' }), {
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       });
     }
 
-    const systemPrompt = getSystemPrompt(wireframe);
+    const systemPrompt = getSystemPrompt(wireframe, designConcept);
 
     const res = await together.chat.completions.create({
       model: 'moonshotai/Kimi-K2.5',
