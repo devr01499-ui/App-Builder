@@ -138,7 +138,7 @@ export default function Home() {
               <Code2 size={48} className="mb-4 text-zinc-400 opacity-50" />
               <h2 className="text-lg font-medium text-zinc-600 mb-2">Awaiting Instructions</h2>
               <p className="text-sm max-w-sm">
-                Enter a prompt on the left to start generating your React components.
+                Simply describe your vision, and watch CLARITIY architect and render a production-ready application in real-time.
               </p>
             </div>
           ) : (
