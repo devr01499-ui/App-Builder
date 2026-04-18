@@ -131,7 +131,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Right Canvas Layout */}
       <div className="flex-1 min-h-[60vh] xl:min-h-0 bg-zinc-50 border border-zinc-200 rounded-3xl p-2 md:p-6 shadow-md relative flex flex-col">
           {!generatedCode && !isLoading ? (
             <div className="flex-1 flex flex-col items-center justify-center text-zinc-500 p-8 text-center border-2 border-dashed border-zinc-300 rounded-2xl">
@@ -143,7 +142,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="flex-1 h-full w-full relative z-10 transition-all duration-500">
-               <SandpackPreview code={generatedCode} />
+               <SandpackPreview code={generatedCode.replace(/```(?:tsx|typescript|jsx|javascript)?\n([\s\S]*?)```/g, "$1").trim() || generatedCode} />
             </div>
           )}
       </div>
