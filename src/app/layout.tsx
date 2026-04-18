@@ -5,10 +5,10 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Clariity",
+  title: "CLARITIY",
   description: "Generate and run rich React web apps in real-time using Kimi K2.5 and Sandpack.",
   openGraph: {
-    title: "Clariity",
+    title: "CLARITIY",
     description: "Build React apps in seconds with Together AI and Sandpack.",
   },
 };

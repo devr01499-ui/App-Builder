@@ -92,11 +92,11 @@ export default function Home() {
               <Sparkles className="text-zinc-900" size={20} />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-br from-zinc-900 to-zinc-500 bg-clip-text text-transparent">
-              Clariity
+              CLARITIY
             </h1>
           </div>
           <p className="text-zinc-500 text-sm">
-            Powered by Together AI & Kimi K2.5. Describe the web app you want to build and watch it render in real-time.
+            Describe the web app you want to build and watch it render in real-time.
           </p>
         </div>
 
