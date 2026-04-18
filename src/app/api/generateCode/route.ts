@@ -38,7 +38,6 @@ export async function POST(req: Request) {
       stream: true,
     });
 
-    // @ts-expect-error - The types from the SDK might not directly map to a stream in edge sometimes, but mostly it does.
     const stream = res.toReadableStream();
     
     return new Response(stream, {
