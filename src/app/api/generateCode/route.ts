@@ -3,11 +3,11 @@ import { getSystemPrompt } from '@/lib/systemPrompt';
 // Standard Edge runtime for streaming
 export const runtime = 'edge';
 
-const PRIMARY_MODEL = 'google/gemma-2-9b-it:free';
+const PRIMARY_MODEL = 'openai/gpt-oss-120b:free';
 const FALLBACK_MODEL = 'meta-llama/llama-3.1-8b-instruct:free';
 
 export async function POST(req: Request) {
-  const apiKey = process.env.OPENROUTER_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
 
   if (!apiKey || apiKey === 'mock_key' || apiKey === '<OPENROUTER_API_KEY>') {
     return new Response(JSON.stringify({ 
@@ -47,6 +47,7 @@ export async function POST(req: Request) {
             { role: 'user', content: prompt }
           ],
           stream: true,
+          reasoning: { enabled: true }
         }),
       });
     };
@@ -64,7 +65,6 @@ export async function POST(req: Request) {
         const errorData = await response.json();
         errorMessage = errorData.error?.message || errorMessage;
       } catch (e) {
-        // Fallback if not JSON
         errorMessage = await response.text() || errorMessage;
       }
 
