@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Octokit } from "@octokit/rest";
-import { Github, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { GitGraph, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 
 interface GitHubExportProps {
   code: string;
@@ -50,7 +50,7 @@ export function GitHubExport({ code }: GitHubExportProps) {
         // Usually, initializing a full repo takes multiple files. For MVP, we'll just create a repo 
         // with App.tsx.
         const user = await octokit.rest.users.getAuthenticated();
-        const repoName = \`ai-generated-app-\${Date.now()}\`;
+        const repoName = `ai-generated-app-${Date.now()}`;
         
         const repoResponse = await octokit.rest.repos.createForAuthenticatedUser({
           name: repoName,
@@ -71,7 +71,7 @@ export function GitHubExport({ code }: GitHubExportProps) {
       }
       
       setStatus("success");
-      setMessage(\`Successfully exported to \${type.toUpperCase()}!\`);
+      setMessage(`Successfully exported to ${type.toUpperCase()}!`);
     } catch (error: any) {
       setStatus("error");
       setMessage(error.message || "Failed to export");
@@ -83,7 +83,7 @@ export function GitHubExport({ code }: GitHubExportProps) {
   return (
     <div className="w-full bg-slate-900 border border-slate-700/50 rounded-xl p-4 shadow-lg">
       <div className="flex items-center space-x-2 mb-4">
-        <Github className="text-white" size={20} />
+        <GitGraph className="text-white" size={20} />
         <h3 className="font-semibold text-white">Export to GitHub</h3>
       </div>
       
@@ -114,7 +114,7 @@ export function GitHubExport({ code }: GitHubExportProps) {
         </div>
 
         {status !== "idle" && (
-          <div className={\`p-3 rounded-lg flex items-start space-x-2 text-sm \${status === "success" ? "bg-emerald-900/30 text-emerald-400" : "bg-red-900/30 text-red-400"}\`}>
+          <div className={`p-3 rounded-lg flex items-start space-x-2 text-sm ${status === "success" ? "bg-emerald-900/30 text-emerald-400" : "bg-red-900/30 text-red-400"}`}>
             {status === "success" ? <CheckCircle2 size={16} className="mt-0.5 shrink-0" /> : <AlertCircle size={16} className="mt-0.5 shrink-0" />}
             <div className="flex flex-col">
               <span>{message}</span>
